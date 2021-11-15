@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84809915318c2994ea82b76d7bd563c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testLevel: {fileID: 11400000, guid: aee0bd44e21d71f429456cdff7a5ed41, type: 2}
+  testLevel: {fileID: 11400000, guid: 04980c2b384759d4bbb6083f5d18ad18, type: 2}
   gameEventChannel: {fileID: 11400000, guid: 514a32e0485ec354cbdca884e72d0124, type: 2}
 --- !u!114 &963371035
 MonoBehaviour:
@@ -894,7 +894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37e32495096f2fa47937ce61af651ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightSize: {x: 1, y: 1}
+  highlightSize: {x: 3, y: 3}
   levelEventChannel: {fileID: 11400000, guid: 81fcd6621d44a674ab4f39c063d45387, type: 2}
   gameEventChannel: {fileID: 11400000, guid: 514a32e0485ec354cbdca884e72d0124, type: 2}
 --- !u!114 &1166448168
