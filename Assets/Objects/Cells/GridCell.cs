@@ -79,16 +79,16 @@ public class GridCell : MonoBehaviour {
         // Play flip animation
         flipSequence = DOTween.Sequence().OnComplete(SwapSides);
         flipSequence.Append(cellHolder.DORotate(new Vector3(180f, 0, 0), 0.25f).SetEase(Ease.InOutCubic));
-        flipSequence.Insert(0, cellHolder.DOLocalMoveY(0.1f, 0.125f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo));
+        flipSequence.Insert(0, cellHolder.DOLocalMoveY(0.15f, 0.125f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo));
     }
 
     public void SwapSides() {
         _topCellVisuals.transform.SetParent(topHolder);
         _topCellVisuals.transform.localRotation = topRotation;
-        _topCellVisuals.transform.localPosition = Vector3.zero;
+        _topCellVisuals.transform.localPosition = new Vector3(0, 0.001f, 0);
         _bottomCellVisuals.transform.SetParent(bottomHolder);
         _bottomCellVisuals.transform.localRotation = bottomRotation;
-        _bottomCellVisuals.transform.localPosition = Vector3.zero;
+        _bottomCellVisuals.transform.localPosition = - new Vector3(0, -0.001f, 0);
         cellHolder.transform.localRotation = holderRotation;
     }
     private bool _highlighted = false;
