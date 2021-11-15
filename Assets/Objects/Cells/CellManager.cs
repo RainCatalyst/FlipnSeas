@@ -12,26 +12,9 @@ public class CellManager : MonoBehaviour
     public Dictionary<CellType, CellSO> typeToCell;
     public Dictionary<CellType, CellType> typeToInverse;
 
-    public Dictionary<CellType, Vector2Int> typeToDirection;
-    public Dictionary<Vector2Int, CellType> directionToPath;
-
-
     private void Start() {
         typeToCell = new Dictionary<CellType, CellSO>();
         typeToInverse = new Dictionary<CellType, CellType>();
-        typeToDirection = new Dictionary<CellType, Vector2Int>() {
-            {CellType.SourceRight, Vector2Int.right},
-            {CellType.SourceLeft, Vector2Int.left},
-            {CellType.SourceUp, Vector2Int.up},
-            {CellType.SourceDown, Vector2Int.down}
-        };
-
-        directionToPath = new Dictionary<Vector2Int, CellType>() {
-          {Vector2Int.right, CellType.PathRight},
-          {Vector2Int.left, CellType.PathLeft},
-          {Vector2Int.up, CellType.PathUp},
-          {Vector2Int.down, CellType.PathDown}  
-        };
         // Initialize dictionaries
         foreach (CellSO cell in cells) {
             typeToCell.Add(cell.type, cell);

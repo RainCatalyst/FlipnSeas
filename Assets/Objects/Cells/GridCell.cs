@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Cells;
+using DG.Tweening;
 
 public class GridCell : MonoBehaviour {
     [SerializeField] private GameObject cellHighlight;
 
+    [SerializeField] private GameObject overlay;
     [SerializeField] private Transform cellHolder;
     [SerializeField] private Transform topHolder;
     [SerializeField] private Transform bottomHolder;
@@ -16,20 +18,27 @@ public class GridCell : MonoBehaviour {
 
     public bool Updated => _updated;
 
+    public bool MarkedAsPath => _markedAsPath;
+
     public Vector2Int GridPosition
     {
         get => _gridPosition;
         set { _gridPosition = value; }
     }
 
-    public CellType TopCellType => _topCell.type;
-    public CellType BottomCellType => _bottomCell.type;
+    public CellSO TopCell => _topCell;
+    public CellSO BottomCell => _bottomCell;
 
     private void Start() {
         _animation = GetComponent<Animation>();
         holderRotation = cellHolder.localRotation;
         topRotation = topHolder.localRotation;
         bottomRotation = bottomHolder.localRotation;
+    }
+
+    public void MarkPath(bool mark) {
+        _markedAsPath = mark;
+        overlay.SetActive(mark);
     }
 
     public void SetHighlight(bool enable) {
@@ -57,6 +66,8 @@ public class GridCell : MonoBehaviour {
     }
 
     public void Flip() {
+        flipSequence?.Complete();
+        // Swap references
         var temp = _topCell;
         _topCell = _bottomCell;
         _bottomCell = temp;
@@ -64,21 +75,14 @@ public class GridCell : MonoBehaviour {
         _topCellVisuals = _bottomCellVisuals;
         _bottomCellVisuals = temp2;
         _updated = false;
-        // foreach (AnimationState state in _animation)
-        // {
-        //     state.speed = 0.1f;
-        // }
+
         // Play flip animation
-        _animation.Play();
+        flipSequence = DOTween.Sequence().OnComplete(SwapSides);
+        flipSequence.Append(cellHolder.DORotate(new Vector3(180f, 0, 0), 0.25f).SetEase(Ease.InOutCubic));
+        flipSequence.Insert(0, cellHolder.DOLocalMoveY(0.1f, 0.125f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo));
     }
 
     public void SwapSides() {
-        StartCoroutine(SwapSidesCoroutine());
-    }
-
-    private IEnumerator SwapSidesCoroutine() {
-        yield return null;
-        
         _topCellVisuals.transform.SetParent(topHolder);
         _topCellVisuals.transform.localRotation = topRotation;
         _topCellVisuals.transform.localPosition = Vector3.zero;
@@ -87,11 +91,14 @@ public class GridCell : MonoBehaviour {
         _bottomCellVisuals.transform.localPosition = Vector3.zero;
         cellHolder.transform.localRotation = holderRotation;
     }
-
     private bool _highlighted = false;
     private bool _updated = false;
+
+    private bool _markedAsPath = false;
     private CellVisuals _topCellVisuals;
     private CellVisuals _bottomCellVisuals;
+
+    private Sequence flipSequence;
 
     private Quaternion holderRotation;
 

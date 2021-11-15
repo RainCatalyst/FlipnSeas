@@ -7,6 +7,7 @@ using Cells;
 
 public class GridManager : MonoBehaviour
 {
+    [Header("Grid Settings")]
     [SerializeField] private Vector2Int gridSize;
     [SerializeField] private float cellSize;
     [SerializeField] private GridCell cellPrefab;
@@ -14,23 +15,46 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform cellHolder;
     [SerializeField] private LayerMask cellMask;
 
+    [Header("Path Settings")]
+    [SerializeField] private GridLine gridLinePrefab;
+
     public Vector2Int GridSize => gridSize;
     public GridCell[,] Grid => _grid;
     public GridCell HoveredCell => _hoveredCell;
 
     private void Start() {
+        _gridLines = new GridLine[0];
         SpawnCells();
+    }
+
+    public void UpdatePaths(List<List<GridCell>> paths) {
+        foreach (GridLine line in _gridLines) {
+            GameObject.Destroy(line.gameObject);
+        }
+
+        _gridLines = new GridLine[paths.Count];
+        for (int i = 0; i < paths.Count; i++) {
+            GridLine line = Instantiate(gridLinePrefab, transform.position, Quaternion.identity);
+            line.SetPath(paths[i]);
+            _gridLines[i] = line;
+        }
+    }
+
+    public void RevealPaths() {
+        foreach (GridLine line in _gridLines) {
+            line.RevealPath();
+        }
     }
 
     public GridCell GetCell(Vector2Int pos) {
         return _grid[pos.x, pos.y];
     }
 
-    public List<GridCell> GetAllCellsOfTypes(List<CellType> types) {
+    public List<GridCell> GetAllCellsOfType(CellType type) {
         var cells = new List<GridCell>();
         for (int x = 0; x < gridSize.x; x++) {
             for (int y = 0; y < gridSize.y; y++) {
-                if (types.Contains(_grid[x, y].TopCellType))
+                if (_grid[x, y].TopCell.type == type)
                     cells.Add(_grid[x, y]);
             }
         }
@@ -52,11 +76,27 @@ public class GridManager : MonoBehaviour
         _grid[pos.x, pos.y].SetHighlight(enable);
     }
 
+    public void MarkCellPath(Vector2Int pos, bool mark)
+    {
+        _grid[pos.x, pos.y].MarkPath(mark);
+    }
+
     public void SetAllCellHighlight(bool enable)
     {
         for (int x = 0; x < gridSize.x; x++) {
             for (int y = 0; y < gridSize.y; y++) {
                 _grid[x, y].SetHighlight(enable);
+            }
+        }
+    }
+
+    public void MarkAllCellPath(bool mark)
+    {
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                _grid[x, y].MarkPath(mark);
             }
         }
     }
@@ -84,11 +124,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void Update() {
-        FindHoveredCell();
-    }
-
-    private void FindHoveredCell() {
+    public void FindHoveredCell() {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(_mouseAxis);
 
@@ -127,8 +163,10 @@ public class GridManager : MonoBehaviour
         _mouseAxis.y = value.Get<float>();
     }
 
+    private GridLine[] _gridLines;
     private GridCell[,] _grid;
     private GridCell _hoveredCell;
+
     private Vector2 _mouseAxis;
     
 }

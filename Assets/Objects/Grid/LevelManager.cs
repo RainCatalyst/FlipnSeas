@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 [RequireComponent(typeof(GridManager))]
 public class LevelManager : MonoBehaviour
@@ -28,13 +29,14 @@ public class LevelManager : MonoBehaviour
     }
 
     private void Update() {
+        // Update currenty hovered cell
+        _gridManager.FindHoveredCell();
+
         if (_clicked) {
             _clicked = false;
-            if (_canClick) {
-                if (_hoveredCell != null) {
-                    FlipHighlighted();
-                    StartCoroutine(UpdateLevel());
-                }   
+            if (_canClick && _hoveredCell != null) {
+                FlipHighlighted();
+                UpdateLevel();
             }
         }
     }
@@ -42,18 +44,9 @@ public class LevelManager : MonoBehaviour
     private void FlipHighlighted() {
         foreach (GridCell cell in _highlightedCells)
         {
-            var inverseCell = CellManager.Instance.GetInverse(cell.TopCellType);
+            var inverseCell = CellManager.Instance.GetInverse(cell.TopCell.type);
             cell.SetBottomCell(inverseCell);
             cell.Flip();
-        }
-    }
-
-    private void FlipUpdated() {
-        for (int x = 0; x < _gridManager.GridSize.x; x++) {
-            for (int y = 0; y < _gridManager.GridSize.y; y++) {
-                if (_gridManager.Grid[x, y].Updated)
-                    _gridManager.Grid[x, y].Flip();
-            }
         }
     }
 
@@ -69,6 +62,12 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void UpdateLevel() {
+        _levelLogic.UpdateLevel();
+        _gridManager.UpdatePaths(_levelLogic.CurrentPaths);
+        _gridManager.RevealPaths();
     }
 
     // Callbacks
@@ -92,9 +91,11 @@ public class LevelManager : MonoBehaviour
     private void OnLevelLoad(LevelSO level)
     {
         print("Loading level");
+        _canClick = false;
         _currentLevel = level;
         var cells = level.layout.GetCells();
         var levelCenter = _gridManager.GridSize / 2 - level.size / 2;
+        var levelSequence = DOTween.Sequence().OnComplete(AfterLevelLoad);
         // TODO: Also replace cells outside of level
         for (int x = 0; x < level.size.x; x++)
         {
@@ -103,22 +104,15 @@ public class LevelManager : MonoBehaviour
                 CellSO cellSO = CellManager.Instance.typeToCell[cells[level.size.y - y - 1, x]];
                 var cellPos = levelCenter + new Vector2Int(x, y);
                 _gridManager.SetBottomCell(cellPos, cellSO);
-                StartCoroutine(FlipCellDelay(_gridManager.GetCell(cellPos), 0.1f + 0.035f * (x + y)));
+                levelSequence.InsertCallback(0.1f + 0.035f * (x + y), () => _gridManager.GetCell(cellPos).Flip());
             }
         }
+
     }
 
-    private IEnumerator FlipCellDelay (GridCell cell, float delay) {
-        yield return new WaitForSeconds(delay);
-        cell.Flip();
-    }
-
-    private IEnumerator UpdateLevel () {
-        _canClick = false;
-        yield return new WaitForSeconds(0.5f);
-        print(_levelLogic.UpdateLevel());
-        FlipUpdated();
+    private void AfterLevelLoad() {
         _canClick = true;
+        UpdateLevel();
     }
 
     private List<GridCell> _highlightedCells;

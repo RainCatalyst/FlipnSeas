@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa528ab895ec6e4ebe89fca6d493f58, type: 3}
   m_Name: Destination
   m_EditorClassIdentifier: 
-  type: 10
-  inverseType: 10
+  type: 5
+  inverseType: 5
+  walkable: 0
   prefab: {fileID: 576542085184439025, guid: 545500dbd4c60484385e8647769e3566, type: 3}

@@ -5,34 +5,38 @@ using Cells;
 
 public class LevelLogic : MonoBehaviour
 {
-
+    public List<List<GridCell>> CurrentPaths => _currentPaths;
     private void Start() {
+        _currentPaths = new List<List<GridCell>>();
+        _leftMirrorToDirection = new Dictionary<Vector2Int, Vector2Int>() {
+            {Vector2Int.right, Vector2Int.down},
+            {Vector2Int.up, Vector2Int.left},
+            {Vector2Int.down, Vector2Int.right},
+            {Vector2Int.left, Vector2Int.up}
+        };
         _gridManager = GetComponent<GridManager>();
     }
 
     public bool UpdateLevel() {
         // Returns true if the level is complete
         // Find all source cells
-        List<GridCell> sourceCells = _gridManager.GetAllCellsOfTypes(new List<CellType>() {
-            CellType.SourceRight, CellType.SourceLeft, CellType.SourceUp, CellType.SourceDown});
-        // Find all path cells
-        List<GridCell> pathCells = _gridManager.GetAllCellsOfTypes(new List<CellType>() {
-            CellType.PathRight, CellType.PathLeft, CellType.PathUp, CellType.PathDown});
+        List<GridCell> sourceCells = _gridManager.GetAllCellsOfType(CellType.Source);
+        _currentPaths.Clear();
         // Reset all path cells
-        foreach (GridCell cell in pathCells) {
-            cell.SetBottomCell(CellManager.Instance.emptyCell);
-        }
+        _gridManager.MarkAllCellPath(false);
 
         bool allSourcesComplete = true;
         // Update paths
         foreach (GridCell sourceCell in sourceCells) {
             HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
             Vector2Int pos = sourceCell.GridPosition;
-            Vector2Int direction = CellManager.Instance.typeToDirection[sourceCell.TopCellType];
+            Vector2Int direction = sourceDirection;
             int steps = 0;
             bool complete = false;
+            
             // TODO: Replace with a normal exit condition
             while (steps < 100) {
+                visited.Add(pos);
                 pos += direction;
                 if (visited.Contains(pos)) {
                     print("Found a loop");
@@ -42,23 +46,28 @@ public class LevelLogic : MonoBehaviour
                 if (!_gridManager.IsInsideGrid(pos))
                     break;
                 var currentCell = _gridManager.GetCell(pos);
-                if (currentCell.TopCellType == CellType.Destination) {
+                if (currentCell.TopCell.type == CellType.Destination) {
                     // Arrived at the desination
+                    visited.Add(pos);
                     complete = true;
                     break;
-                } else if (currentCell.TopCellType == CellType.Empty ||
-                    currentCell.TopCellType == CellType.PathRight ||
-                    currentCell.TopCellType == CellType.PathLeft ||
-                    currentCell.TopCellType == CellType.PathUp ||
-                    currentCell.TopCellType == CellType.PathDown) {
+                } else if (currentCell.TopCell.walkable) {
                     // Advance path
-                    var pathCell = CellManager.Instance.typeToCell[CellManager.Instance.directionToPath[direction]];
-                    _gridManager.SetBottomCell(pos, pathCell);
+                    if (currentCell.TopCell.type == CellType.MirrorLeft)
+                        direction = _leftMirrorToDirection[direction];
+                    else if (currentCell.TopCell.type == CellType.MirrorRight)
+                        direction = -_leftMirrorToDirection[direction];
+                    // currentCell.MarkPath(true);
                 } else {
                     break;
                 }
-                visited.Add(pos);
+                
             }
+            List<GridCell> path = new List<GridCell>();
+            foreach (Vector2Int visitedPos in visited) {
+                path.Add(_gridManager.GetCell(visitedPos));
+            }
+            _currentPaths.Add(path);
             
             if (!complete)
                 allSourcesComplete = false;
@@ -67,5 +76,8 @@ public class LevelLogic : MonoBehaviour
         return allSourcesComplete;
     }
 
+    private Dictionary<Vector2Int, Vector2Int> _leftMirrorToDirection;
+    private List<List<GridCell>> _currentPaths;
+    private Vector2Int sourceDirection = Vector2Int.right;
     private GridManager _gridManager;
 }

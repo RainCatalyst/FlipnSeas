@@ -8,6 +8,8 @@ public class CellSO : ScriptableObject
 {
     public CellType type;
     public CellType inverseType;
+
+    public bool walkable;
     public CellVisuals prefab;
 }
 
