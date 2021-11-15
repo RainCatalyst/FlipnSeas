@@ -34,6 +34,11 @@ public class GridCell : MonoBehaviour {
         holderRotation = cellHolder.localRotation;
         topRotation = topHolder.localRotation;
         bottomRotation = bottomHolder.localRotation;
+        cellHolder.localPosition = new Vector3(0, 4f, 0);
+    }
+
+    public void FallAnimation() {
+        cellHolder.DOLocalMoveY(0f, 0.5f).SetEase(Ease.InQuad);
     }
 
     public void MarkPath(bool mark) {

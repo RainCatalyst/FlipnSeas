@@ -11,6 +11,8 @@ public class GameEventChannelSO : ScriptableObject
     public UnityAction OnLevelWon;
     public UnityAction OnLevelLost;
 
+    public UnityAction<Vector3> OnCameraFocused;
+
     public void LoadLevel(LevelSO level)
     {
         OnLevelLoad?.Invoke(level);
@@ -34,5 +36,9 @@ public class GameEventChannelSO : ScriptableObject
     public void LoseLevel()
     {
         OnLevelLost?.Invoke();
+    }
+
+    public void FocusCamera(Vector3 position) {
+        OnCameraFocused?.Invoke(position);
     }
 }

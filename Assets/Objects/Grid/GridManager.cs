@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.InputSystem;
 using Cells;
+using DG.Tweening;
 
 public class GridManager : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Vector2Int gridSize;
     [SerializeField] private float cellSize;
     [SerializeField] private GridCell cellPrefab;
+    [SerializeField] private float rotationJitter;
+    [SerializeField] private float positionJitter;
+
 
     [SerializeField] private Transform cellHolder;
     [SerializeField] private LayerMask cellMask;
@@ -111,17 +115,22 @@ public class GridManager : MonoBehaviour
 
         // Spawn cell prefabs (empty)
         Vector2 offset = new Vector2(-cellSize * (gridSize.x / 2), -cellSize * (gridSize.y / 2));
-        
+        var spawnSequence = DOTween.Sequence();
         for (int x = 0; x < gridSize.x; x++) {
             for (int y = 0; y < gridSize.y; y++) {
                 Vector3 cellPosition = transform.position + transform.forward * (offset.x + x * cellSize) - transform.right * (offset.y + y * cellSize);
-                GridCell cell = Instantiate(cellPrefab, cellPosition, Quaternion.identity, cellHolder);
+                Quaternion rotationOffset = Quaternion.AngleAxis(Random.Range(-rotationJitter, rotationJitter), Vector3.up);
+                Vector3 positionOffset = Vector3.right * Random.Range(-positionJitter, positionJitter) + Vector3.forward * Random.Range(-positionJitter, positionJitter);
+                GridCell cell = Instantiate(cellPrefab, cellPosition + positionOffset, Quaternion.identity * rotationOffset, cellHolder);
                 cell.GridPosition = new Vector2Int(x, y);
                 cell.SetTopCell(CellManager.Instance.emptyCell);
                 cell.SetBottomCell(CellManager.Instance.emptyCell);
                 _grid[x, y] = cell;
+
+                spawnSequence.InsertCallback(0.1f + 0.05f * (x + y), () => cell.FallAnimation());
             }
         }
+        // spawnSequence.PrependInterval(3);
     }
 
     public void FindHoveredCell() {
