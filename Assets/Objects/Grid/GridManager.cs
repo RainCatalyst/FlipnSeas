@@ -14,21 +14,21 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GridCell cellPrefab;
     [SerializeField] private float rotationJitter;
     [SerializeField] private float positionJitter;
-
-
+    [SerializeField] private Transform previousLevelHolder;
+    [SerializeField] private Transform levelHolderPrefab;
     [SerializeField] private Transform cellHolder;
     [SerializeField] private LayerMask cellMask;
 
     [Header("Path Settings")]
     [SerializeField] private GridLine gridLinePrefab;
 
+    public float CellSize => cellSize;
     public Vector2Int GridSize => gridSize;
     public GridCell[,] Grid => _grid;
     public GridCell HoveredCell => _hoveredCell;
 
     private void Start() {
         _gridLines = new GridLine[0];
-        SpawnCells();
     }
 
     public void UpdatePaths(List<List<GridCell>> paths) {
@@ -38,10 +38,16 @@ public class GridManager : MonoBehaviour
 
         _gridLines = new GridLine[paths.Count];
         for (int i = 0; i < paths.Count; i++) {
-            GridLine line = Instantiate(gridLinePrefab, transform.position, Quaternion.identity);
+            GridLine line = Instantiate(gridLinePrefab, transform.position, Quaternion.identity, cellHolder);
             line.SetPath(paths[i]);
             _gridLines[i] = line;
         }
+    }
+
+    public GridLine AddLine(GridCell origin, GridCell destination) {
+        GridLine line = Instantiate(gridLinePrefab, transform.position, Quaternion.identity, cellHolder);
+        line.SetPath(new List<GridCell>() {origin, destination});
+        return line;
     }
 
     public void RevealPaths() {
@@ -109,9 +115,11 @@ public class GridManager : MonoBehaviour
         return pos.x >= 0 && pos.y >= 0 && pos.x < gridSize.x && pos.y < gridSize.y;
     }
 
-    private void SpawnCells() {
+    public void InitializeGrid(Vector2Int size) {
+        gridSize = size;
         // Initialize grid array
         _grid = new GridCell[gridSize.x, gridSize.y];
+        _gridLines = new GridLine[0];
 
         // Spawn cell prefabs (empty)
         Vector2 offset = new Vector2(-cellSize * (gridSize.x / 2), -cellSize * (gridSize.y / 2));
@@ -131,6 +139,14 @@ public class GridManager : MonoBehaviour
             }
         }
         // spawnSequence.PrependInterval(3);
+    }
+
+    public void UnparentCurrentLevel() {
+        if (cellHolder.childCount > 0)
+        {
+            cellHolder.SetParent(previousLevelHolder);
+            cellHolder = Instantiate(levelHolderPrefab, transform.position, Quaternion.identity, transform);
+        }
     }
 
     public void FindHoveredCell() {
@@ -172,6 +188,7 @@ public class GridManager : MonoBehaviour
         _mouseAxis.y = value.Get<float>();
     }
 
+    private List<Transform> previousLevels;
     private GridLine[] _gridLines;
     private GridCell[,] _grid;
     private GridCell _hoveredCell;

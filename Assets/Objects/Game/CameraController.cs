@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour
 
     public void FocusOnPosition(Vector3 target) {
         _focusTween?.Kill();
-        _focusTween = transform.DOMove(target, focusDuration);
+        _focusTween = transform.DOMove(target, focusDuration).SetEase(Ease.InOutQuad);
     }
 
     private Tween _focusTween;

@@ -9,6 +9,8 @@ public class LevelSO : ScriptableObject
 {
     public string id;
     public Vector2Int size;
+    public Vector2Int entrance;
+    public Vector2Int exit;
     
     public Array2DCellType layout;
 
