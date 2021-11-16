@@ -144,6 +144,7 @@ public class GridManager : MonoBehaviour
     public void UnparentCurrentLevel() {
         if (cellHolder.childCount > 0)
         {
+            SetAllCellHighlight(false);
             cellHolder.SetParent(previousLevelHolder);
             cellHolder = Instantiate(levelHolderPrefab, transform.position, Quaternion.identity, transform);
         }
