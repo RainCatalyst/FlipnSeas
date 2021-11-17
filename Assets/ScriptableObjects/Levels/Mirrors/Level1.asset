@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: Level1
   m_EditorClassIdentifier: 
   id: mirrors_level1
+  flips: 2
   size: {x: 5, y: 3}
+  entrance: {x: 0, y: 2}
+  exit: {x: 4, y: 0}
   layout:
     gridSize: {x: 5, y: 3}
     cellSize: {x: 64, y: 16}
     cells:
     - row: 0200000001000000040000000100000000000000
     - row: 0000000000000000000000000000000000000000
-    - row: 0000000001000000040000000100000005000000
+    - row: 000000000100000004000000010000000b000000

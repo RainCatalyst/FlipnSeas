@@ -6,6 +6,12 @@ namespace Cells
         Source,
         MirrorLeft,
         MirrorRight,
+        WhirlwindRight,
+        WhirlwindLeft,
+        SignpostRight,
+        SignpostLeft,
+        SignpostUp,
+        SignpostDown,
         Destination
     };
 }

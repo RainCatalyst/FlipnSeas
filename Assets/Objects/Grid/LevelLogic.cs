@@ -8,12 +8,6 @@ public class LevelLogic : MonoBehaviour
     public List<List<GridCell>> CurrentPaths => _currentPaths;
     private void Start() {
         _currentPaths = new List<List<GridCell>>();
-        _leftMirrorToDirection = new Dictionary<Vector2Int, Vector2Int>() {
-            {Vector2Int.right, Vector2Int.down},
-            {Vector2Int.up, Vector2Int.left},
-            {Vector2Int.down, Vector2Int.right},
-            {Vector2Int.left, Vector2Int.up}
-        };
         _gridManager = GetComponent<GridManager>();
     }
 
@@ -46,6 +40,7 @@ public class LevelLogic : MonoBehaviour
                 if (!_gridManager.IsInsideGrid(pos))
                     break;
                 var currentCell = _gridManager.GetCell(pos);
+                // print(currentCell.TopCell.type);
                 if (currentCell.TopCell.type == CellType.Destination) {
                     // Arrived at the desination
                     visited.Add(pos);
@@ -53,10 +48,7 @@ public class LevelLogic : MonoBehaviour
                     break;
                 } else if (currentCell.TopCell.walkable) {
                     // Advance path
-                    if (currentCell.TopCell.type == CellType.MirrorLeft)
-                        direction = _leftMirrorToDirection[direction];
-                    else if (currentCell.TopCell.type == CellType.MirrorRight)
-                        direction = -_leftMirrorToDirection[direction];
+                    direction = UpdateDirection(currentCell.TopCell.type, direction);
                     // currentCell.MarkPath(true);
                 } else {
                     break;
@@ -76,7 +68,51 @@ public class LevelLogic : MonoBehaviour
         return allSourcesComplete;
     }
 
-    private Dictionary<Vector2Int, Vector2Int> _leftMirrorToDirection;
+    private Vector2Int UpdateDirection(CellType type, Vector2Int direction) {
+        switch (type)
+        {
+            case CellType.MirrorLeft:
+                direction = _leftMirrorToDirection[direction];
+                break;
+            case CellType.MirrorRight:
+                direction = -_leftMirrorToDirection[direction];
+                break;
+            case CellType.WhirlwindLeft:
+                direction = _leftWhirlwindToDirection[direction];
+                break;
+            case CellType.WhirlwindRight:
+                direction = -_leftWhirlwindToDirection[direction];
+                break;
+            case CellType.SignpostLeft:
+                direction = Vector2Int.left;
+                break;
+            case CellType.SignpostRight:
+                direction = Vector2Int.right;
+                break;
+            case CellType.SignpostUp:
+                direction = Vector2Int.up;
+                break;
+            case CellType.SignpostDown:
+                direction = Vector2Int.down;
+                break;
+        }
+        return direction;
+    }
+
+    private Dictionary<Vector2Int, Vector2Int> _leftMirrorToDirection = new Dictionary<Vector2Int, Vector2Int>() {
+        {Vector2Int.right, Vector2Int.down},
+        { Vector2Int.up, Vector2Int.left},
+        { Vector2Int.down, Vector2Int.right},
+        { Vector2Int.left, Vector2Int.up}
+    };
+
+
+    private Dictionary<Vector2Int, Vector2Int> _leftWhirlwindToDirection = new Dictionary<Vector2Int, Vector2Int>() {
+        {Vector2Int.right, Vector2Int.up},
+        {Vector2Int.up, Vector2Int.left},
+        {Vector2Int.down, Vector2Int.right},
+        {Vector2Int.left, Vector2Int.down}
+    };
     private List<List<GridCell>> _currentPaths;
     private Vector2Int sourceDirection = Vector2Int.right;
     private GridManager _gridManager;

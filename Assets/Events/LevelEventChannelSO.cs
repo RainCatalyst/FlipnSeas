@@ -5,15 +5,9 @@ using UnityEngine.Events;
 [CreateAssetMenu(fileName = "LevelEventChannel", menuName = "Events/Level Event Channel")]
 public class LevelEventChannelSO : ScriptableObject
 {
-    public UnityAction<GridCell> OnCellHovered;
-    public UnityAction<GridCell> OnCellUnhovered;
+    public UnityAction<int> OnFlipsUpdated;
 
-    public void HoverCell(GridCell cell) {
-        OnCellHovered?.Invoke(cell);
-    }
-
-    public void UnhoverCell(GridCell cell)
-    {
-        OnCellUnhovered?.Invoke(cell);
+    public void UpdateFlips(int flips) {
+        OnFlipsUpdated?.Invoke(flips);
     }
 }

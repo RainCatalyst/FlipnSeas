@@ -365,6 +365,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &697873440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 697873441}
+  m_Layer: 0
+  m_Name: PreviousLevels
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &697873441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697873440}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.1499999, y: 1.6499999, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &786149033
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,8 +537,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 5.5
-  m_Range: 16
+  m_Intensity: 20
+  m_Range: 6.5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -565,7 +595,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 959740745}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.76, y: 2.32, z: 0.01}
+  m_LocalPosition: {x: -0.76, y: 4.37, z: 0.01}
   m_LocalScale: {x: 0.25, y: 0.83313, z: 0.25}
   m_Children: []
   m_Father: {fileID: 2052271866}
@@ -629,7 +659,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84809915318c2994ea82b76d7bd563c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testLevel: {fileID: 11400000, guid: 04980c2b384759d4bbb6083f5d18ad18, type: 2}
+  levels:
+  - {fileID: 11400000, guid: aee0bd44e21d71f429456cdff7a5ed41, type: 2}
+  - {fileID: 11400000, guid: 5e8be1af6b9416a4693c0b1c8e0c8c24, type: 2}
+  - {fileID: 11400000, guid: f97dd871f01a64343b247475e7627adf, type: 2}
+  - {fileID: 11400000, guid: 04980c2b384759d4bbb6083f5d18ad18, type: 2}
+  levelManager: {fileID: 1166448167}
+  levelIdx: -1
   gameEventChannel: {fileID: 11400000, guid: 514a32e0485ec354cbdca884e72d0124, type: 2}
 --- !u!114 &963371035
 MonoBehaviour:
@@ -942,6 +978,8 @@ MonoBehaviour:
   cellPrefab: {fileID: 293614699627867248, guid: 06f4e91b85f152843b5e2b7182dc6b2b, type: 3}
   rotationJitter: 1.5
   positionJitter: 0.015
+  previousLevelHolder: {fileID: 697873441}
+  levelHolderPrefab: {fileID: 1583580701738833465, guid: ec0f320ed77206c43ab13b9c0edf37d8, type: 3}
   cellHolder: {fileID: 1074143922}
   cellMask:
     serializedVersion: 2
@@ -1256,6 +1294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2052271866}
+  - component: {fileID: 2052271867}
   m_Layer: 0
   m_Name: CameraTarget
   m_TagString: Untagged
@@ -1279,6 +1318,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2052271867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052271865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1e3fd2abe917c94d923c5f4d3ece2f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  focusDuration: 0.5
+  gameEventChannel: {fileID: 11400000, guid: 514a32e0485ec354cbdca884e72d0124, type: 2}
 --- !u!1 &2076798268
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,6 +1382,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c7ace1473cd433d4181a4b8e6a811bb4, type: 2}
   - {fileID: 11400000, guid: 4959985410add5a478aa696ac1f79a6a, type: 2}
   - {fileID: 11400000, guid: 1607bc086be13094d9ab2e8a349bba30, type: 2}
+  - {fileID: 11400000, guid: b311c0b4ec35807468ee962a21c76766, type: 2}
+  - {fileID: 11400000, guid: 7b965ad57ed86fd4591790e5b1bb876d, type: 2}
   emptyCell: {fileID: 11400000, guid: d93ab1f47176f8b4a8892c87589296f5, type: 2}
 --- !u!1 &2131871661
 GameObject:

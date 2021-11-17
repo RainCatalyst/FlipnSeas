@@ -22,11 +22,17 @@ public class LevelManager : MonoBehaviour
     private void OnEnable()
     {
         gameEventChannel.OnLevelLoad += OnLevelLoad;
+        gameEventChannel.OnLevelRestart += OnLevelRestart;
+        gameEventChannel.OnLevelWon += OnLevelWon;
+        gameEventChannel.OnLevelLost += OnLevelLost;
     }
 
     private void OnDisable()
     {
         gameEventChannel.OnLevelLoad -= OnLevelLoad;
+        gameEventChannel.OnLevelRestart -= OnLevelRestart;
+        gameEventChannel.OnLevelWon -= OnLevelWon;
+        gameEventChannel.OnLevelLost -= OnLevelLost;
     }
 
     private void Update() {
@@ -37,6 +43,8 @@ public class LevelManager : MonoBehaviour
             _clicked = false;
             if (_canClick && _hoveredCell != null) {
                 FlipHighlighted();
+                _flipsLeft--;
+                levelEventChannel.UpdateFlips(_flipsLeft);
                 UpdateLevel();
             }
         }
@@ -66,9 +74,38 @@ public class LevelManager : MonoBehaviour
     }
 
     private void UpdateLevel() {
-        _levelLogic.UpdateLevel();
+        bool complete = _levelLogic.UpdateLevel();
         _gridManager.UpdatePaths(_levelLogic.CurrentPaths);
         _gridManager.RevealPaths();
+        print("Flips left: " + _flipsLeft);
+
+        if (complete)
+            gameEventChannel.WinLevel();
+        else if (_flipsLeft <= 0)
+            gameEventChannel.LoseLevel();
+    }
+
+    private Sequence LoadCells(LevelSO level) {
+        _canClick = false;
+        _flipsLeft = level.flips;
+        levelEventChannel.UpdateFlips(_flipsLeft);
+
+        var cells = level.layout.GetCells();
+        var levelCenter = _gridManager.GridSize / 2 - level.size / 2;
+        var levelSequence = DOTween.Sequence().OnComplete(AfterLevelLoad);
+        // TODO: Also replace cells outside of level
+        for (int x = 0; x < level.size.x; x++)
+        {
+            for (int y = 0; y < level.size.y; y++)
+            {
+                CellSO cellSO = CellManager.Instance.typeToCell[cells[level.size.y - y - 1, x]];
+                var cellPos = levelCenter + new Vector2Int(x, y);
+                _gridManager.SetBottomCell(cellPos, cellSO);
+                levelSequence.InsertCallback(0.035f * (x + y), () => _gridManager.GetCell(cellPos).Flip());
+            }
+        }
+        levelSequence.PrependInterval(1);
+        return levelSequence;
     }
 
     // Callbacks
@@ -92,7 +129,6 @@ public class LevelManager : MonoBehaviour
     private void OnLevelLoad(LevelSO level)
     {
         print("Loading level");
-        _canClick = false;
         _gridManager.UnparentCurrentLevel();
         // Move level
         GridCell exitCell = null;
@@ -102,32 +138,17 @@ public class LevelManager : MonoBehaviour
             exitCell = _gridManager.GetCell(_currentLevel.exit);
         }
         
-        _currentLevel = level;       
+        _currentLevel = level;
 
         // Initialize grid
         _gridManager.InitializeGrid(level.size);
-
 
         // Set exit position
         var exitCellPos = _gridManager.GetCell(level.exit).transform.position;
         _exitPosition = new Vector3(exitCellPos.x, _exitPosition.y, exitCellPos.z);
 
         // Update cells
-        var cells = level.layout.GetCells();
-        var levelCenter = _gridManager.GridSize / 2 - level.size / 2;
-        var levelSequence = DOTween.Sequence().OnComplete(AfterLevelLoad);
-        // TODO: Also replace cells outside of level
-        for (int x = 0; x < level.size.x; x++)
-        {
-            for (int y = 0; y < level.size.y; y++)
-            {
-                CellSO cellSO = CellManager.Instance.typeToCell[cells[level.size.y - y - 1, x]];
-                var cellPos = levelCenter + new Vector2Int(x, y);
-                _gridManager.SetBottomCell(cellPos, cellSO);
-                levelSequence.InsertCallback(0.035f * (x + y), () => _gridManager.GetCell(cellPos).Flip());
-            }
-        }
-        levelSequence.PrependInterval(1);
+        var levelSequence = LoadCells(level);
         // Connect exit line
         if (exitCell != null) {
             var exitLine = _gridManager.AddLine(exitCell, _gridManager.GetCell(level.entrance));
@@ -135,14 +156,28 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void OnLevelRestart(){
+        LoadCells(_currentLevel);
+    }
+
     private void AfterLevelLoad() {
         _canClick = true;
         UpdateLevel();
     }
 
+    private void OnLevelWon() {
+        _canClick = false;
+        _gridManager.PulsePaths();
+    }
+
+    private void OnLevelLost() {
+        _canClick = false;
+    }
+
     private List<GridCell> _highlightedCells;
 
     private Vector3 _exitPosition;
+    private int _flipsLeft = 0;
 
     private bool _canClick = true;
     private bool _clicked;

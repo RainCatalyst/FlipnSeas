@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fa528ab895ec6e4ebe89fca6d493f58, type: 3}
-  m_Name: Destination
+  m_Name: WhirlwindRight
   m_EditorClassIdentifier: 
-  type: 11
-  inverseType: 11
-  walkable: 0
-  prefab: {fileID: 576542085184439025, guid: 545500dbd4c60484385e8647769e3566, type: 3}
+  type: 5
+  inverseType: 6
+  walkable: 1
+  prefab: {fileID: 576542085184439025, guid: dcb03fef65093cb40a54b24344bc6320, type: 3}

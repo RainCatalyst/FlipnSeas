@@ -56,6 +56,13 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void PulsePaths() {
+        foreach (GridLine line in _gridLines)
+        {
+            line.Pulse();
+        }
+    }
+
     public GridCell GetCell(Vector2Int pos) {
         return _grid[pos.x, pos.y];
     }

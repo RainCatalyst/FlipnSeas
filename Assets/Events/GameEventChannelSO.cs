@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public class GameEventChannelSO : ScriptableObject
 {
     public UnityAction<LevelSO> OnLevelLoad;
+
+    public UnityAction OnLevelRestart;
     public UnityAction OnLevelStarted;
     public UnityAction OnLevelClosed;
     public UnityAction OnLevelWon;
@@ -16,6 +18,11 @@ public class GameEventChannelSO : ScriptableObject
     public void LoadLevel(LevelSO level)
     {
         OnLevelLoad?.Invoke(level);
+    }
+
+    public void RestartLevel()
+    {
+        OnLevelRestart?.Invoke();
     }
 
     public void StartLevel()

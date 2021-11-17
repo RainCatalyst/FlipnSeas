@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,15 +12,43 @@ public class GameManager : MonoBehaviour
     [Header("Events")]
     [SerializeField] private GameEventChannelSO gameEventChannel;
 
+    private void OnEnable() {
+        gameEventChannel.OnLevelWon += OnLevelWon;
+        gameEventChannel.OnLevelLost += OnLevelLost;
+    }
+
+    private void OnDisable() {
+        gameEventChannel.OnLevelWon -= OnLevelWon;
+        gameEventChannel.OnLevelLost -= OnLevelLost;
+    }
+
     public void LoadNextLevel() {
         levelIdx = Mathf.Clamp(levelIdx + 1, 0, levels.Length - 1);
-        //levelManager.MoveToNextLevel();
-        gameEventChannel.LoadLevel(levels[levelIdx]);
-        gameEventChannel.FocusCamera(levelManager.transform.position);
+        
+        var loadSequence = DOTween.Sequence();
+        loadSequence.AppendCallback(() => gameEventChannel.LoadLevel(levels[levelIdx]));
+        loadSequence.InsertCallback(0.5f, () => gameEventChannel.FocusCamera(levelManager.transform.position));
+        loadSequence.PrependInterval(0.5f);
+    }
+
+    public void RestartLevel() {
+        gameEventChannel.RestartLevel();
     }
 
     private void OnInteract()
     {
         LoadNextLevel();
+    }
+
+    private void OnLevelWon()
+    {
+        print("won");
+        LoadNextLevel();
+    }
+
+    private void OnLevelLost()
+    {
+        print("lost");
+        RestartLevel();
     }
 }
