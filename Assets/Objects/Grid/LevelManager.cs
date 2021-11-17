@@ -15,7 +15,6 @@ public class LevelManager : MonoBehaviour
     private void Start() {
         _gridManager = GetComponent<GridManager>();
         _levelLogic = GetComponent<LevelLogic>();
-        _highlightedCells = new List<GridCell>();
         _exitPosition = transform.position;
     }
 
@@ -42,7 +41,7 @@ public class LevelManager : MonoBehaviour
         if (_clicked) {
             _clicked = false;
             if (_canClick && _hoveredCell != null) {
-                FlipHighlighted();
+                FlipHighlighted(_hoveredCell.GridPosition);
                 _flipsLeft--;
                 levelEventChannel.UpdateFlips(_flipsLeft);
                 UpdateLevel();
@@ -50,23 +49,32 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void FlipHighlighted() {
-        foreach (GridCell cell in _highlightedCells)
-        {
-            var inverseCell = CellManager.Instance.GetInverse(cell.TopCell.type);
-            cell.SetBottomCell(inverseCell);
-            cell.Flip();
+    private void FlipHighlighted(Vector2Int pos) {
+        //var flipSequence = DOTween.Sequence();
+        var offset = highlightSize / 2;
+        for (int x = 0; x < highlightSize.x; x++) {
+            for (int y = 0; y < highlightSize.y; y++) {
+                var cellPos = new Vector2Int(x, y) + pos - offset;
+                if (_gridManager.IsInsideGrid(cellPos))
+                {
+                    var cell = _gridManager.GetCell(cellPos);
+                    var inverseCell = CellManager.Instance.GetInverse(cell.TopCell.type);
+                    cell.SetBottomCell(inverseCell);
+                    cell.Flip(0.035f * (x + y));
+                    //flipSequence.InsertCallback(0.035f * (x + y), () => cell.Flip());
+                }
+            }
         }
     }
 
     private void HighlightCells(Vector2Int pos) {
-        _highlightedCells.Clear();
+        //_highlightedCells.Clear();
         var offset = highlightSize / 2;
         for (int x = 0; x < highlightSize.x; x++) {
             for (int y = 0; y < highlightSize.y; y++) {
                 var cellPos = new Vector2Int(x, y) + pos - offset;
                 if (_gridManager.IsInsideGrid(cellPos)) {
-                    _highlightedCells.Add(_gridManager.GetCell(cellPos));
+                    //_highlightedCells.Add(_gridManager.GetCell(gri));
                     _gridManager.SetCellHighlight(cellPos, true);
                 }
             }
@@ -77,8 +85,6 @@ public class LevelManager : MonoBehaviour
         bool complete = _levelLogic.UpdateLevel();
         _gridManager.UpdatePaths(_levelLogic.CurrentPaths);
         _gridManager.RevealPaths();
-        print("Flips left: " + _flipsLeft);
-
         if (complete)
             gameEventChannel.WinLevel();
         else if (_flipsLeft <= 0)
@@ -91,7 +97,7 @@ public class LevelManager : MonoBehaviour
         levelEventChannel.UpdateFlips(_flipsLeft);
 
         var cells = level.layout.GetCells();
-        var levelCenter = _gridManager.GridSize / 2 - level.size / 2;
+        //var levelCenter = _gridManager.GridSize / 2 - level.size / 2;
         var levelSequence = DOTween.Sequence().OnComplete(AfterLevelLoad);
         // TODO: Also replace cells outside of level
         for (int x = 0; x < level.size.x; x++)
@@ -99,9 +105,8 @@ public class LevelManager : MonoBehaviour
             for (int y = 0; y < level.size.y; y++)
             {
                 CellSO cellSO = CellManager.Instance.typeToCell[cells[level.size.y - y - 1, x]];
-                var cellPos = levelCenter + new Vector2Int(x, y);
+                var cellPos = new Vector2Int(x, y);
                 _gridManager.SetBottomCell(cellPos, cellSO);
-                levelSequence.InsertCallback(0.035f * (x + y), () => _gridManager.GetCell(cellPos).Flip());
             }
         }
         levelSequence.PrependInterval(1);
@@ -123,7 +128,7 @@ public class LevelManager : MonoBehaviour
     {
         _hoveredCell = null;
         _gridManager.SetAllCellHighlight(false);
-        _highlightedCells.Clear();
+        // _highlightedCells.Clear();
     }
 
     private void OnLevelLoad(LevelSO level)
@@ -162,6 +167,11 @@ public class LevelManager : MonoBehaviour
 
     private void AfterLevelLoad() {
         _canClick = true;
+        for (int x = 0; x < _gridManager.GridSize.x; x++) {
+            for (int y = 0; y < _gridManager.GridSize.y; y++) {
+                _gridManager.GetCell(new Vector2Int(x, y)).Flip(0.035f * (x + y));
+            }
+        }
         UpdateLevel();
     }
 
@@ -174,7 +184,7 @@ public class LevelManager : MonoBehaviour
         _canClick = false;
     }
 
-    private List<GridCell> _highlightedCells;
+    //private Dictionary<GridCell, Vector2Int> _highlightedCells = new Dictionary<GridCell, Vector2Int>();
 
     private Vector3 _exitPosition;
     private int _flipsLeft = 0;

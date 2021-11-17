@@ -30,7 +30,8 @@ public class GridLine : MonoBehaviour
         
         _revealTween = DOTween.Sequence()
             .Append(DOTween.To((x) => _lineRenderer.startColor = gradient.Evaluate(x), 0, 1, 0.1f))
-            .Append(DOTween.To((x) => _lineRenderer.endColor = gradient.Evaluate(x), 0, 1, 0.3f)); //_lineRenderer.DOColor(new Color2(transparent, transparent), new Color2(opaque, opaque), 0.25f);
+            .Append(DOTween.To((x) => _lineRenderer.endColor = gradient.Evaluate(x), 0, 1, 0.3f))
+            .PrependInterval(0.15f); //_lineRenderer.DOColor(new Color2(transparent, transparent), new Color2(opaque, opaque), 0.25f);
     }
 
     public void Pulse() {

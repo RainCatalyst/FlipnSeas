@@ -129,7 +129,7 @@ public class GridManager : MonoBehaviour
         _gridLines = new GridLine[0];
 
         // Spawn cell prefabs (empty)
-        Vector2 offset = new Vector2(-cellSize * (gridSize.x / 2), -cellSize * (gridSize.y / 2));
+        Vector2 offset = -new Vector2(cellSize * (gridSize.x / 2), cellSize * (gridSize.y / 2));
         var spawnSequence = DOTween.Sequence();
         for (int x = 0; x < gridSize.x; x++) {
             for (int y = 0; y < gridSize.y; y++) {
@@ -152,6 +152,10 @@ public class GridManager : MonoBehaviour
         if (cellHolder.childCount > 0)
         {
             SetAllCellHighlight(false);
+            foreach (Transform cell in cellHolder) {
+                if (cell.gameObject.TryGetComponent(out GridCell gridCell))
+                    GameObject.Destroy(gridCell);
+            }
             cellHolder.SetParent(previousLevelHolder);
             cellHolder = Instantiate(levelHolderPrefab, transform.position, Quaternion.identity, transform);
         }

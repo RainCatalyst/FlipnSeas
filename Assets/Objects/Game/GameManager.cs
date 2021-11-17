@@ -32,7 +32,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void RestartLevel() {
-        gameEventChannel.RestartLevel();
+        var restartSequnce = DOTween.Sequence();
+        restartSequnce.AppendCallback(() => gameEventChannel.RestartLevel());
+        restartSequnce.PrependInterval(0.3f);
     }
 
     private void OnInteract()

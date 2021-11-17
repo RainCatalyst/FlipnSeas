@@ -53,6 +53,7 @@ public class GridCell : MonoBehaviour {
     }
 
     public void SetTopCell(CellSO cellSO) {
+        flipSequence?.Complete();
         // Replace top cell with new CellSO
         _topCell = cellSO;
         if (_topCellVisuals != null)
@@ -61,6 +62,7 @@ public class GridCell : MonoBehaviour {
     }
 
     public void SetBottomCell(CellSO cellSO) {
+        flipSequence?.Complete();
         // Replace bottom cell with new CellSO
         if (_bottomCell != cellSO)
             _updated = true;
@@ -71,7 +73,7 @@ public class GridCell : MonoBehaviour {
         
     }
 
-    public void Flip() {
+    public void Flip(float visualsDelay = 0f) {
         flipSequence?.Complete();
         // Swap references
         var temp = _topCell;
@@ -84,17 +86,25 @@ public class GridCell : MonoBehaviour {
 
         // Play flip animation
         flipSequence = DOTween.Sequence().OnComplete(SwapSides);
-        flipSequence.Append(cellHolder.DORotate(new Vector3(180f, 0, 0), 0.25f).SetEase(Ease.InOutCubic));
-        flipSequence.Insert(0, cellHolder.DOLocalMoveY(0.15f, 0.125f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo));
+        // flipSequence.Append(cellHolder.DORotate(new Vector3(180f, 0, 0), .25f).SetEase(Ease.InOutCubic));
+        // flipSequence.Insert(0, cellHolder.DOLocalMoveY(0.15f, .125f).Setase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo));
+
+        flipSequence.Append(cellHolder.DOLocalMoveY(0.3f, 0.2f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo));
+        flipSequence.Insert(0.05f, cellHolder.DOLocalRotate(new Vector3(180f, 0, 0), 0.3f).SetEase(Ease.InOutCubic));
+
+        // flipSequence.Append(cellHolder.DOLocalMoveY(0.3f, 1f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo));
+        // flipSequence.Insert(0.05f, cellHolder.DOLocalRotate(new Vector3(180f, 0, 0), 1f).SetEase(Ease.InOutCubic));
+
+        flipSequence.PrependInterval(visualsDelay);
     }
 
     public void SwapSides() {
         _topCellVisuals.transform.SetParent(topHolder);
         _topCellVisuals.transform.localRotation = topRotation;
-        _topCellVisuals.transform.localPosition = new Vector3(0, 0.001f, 0);
+        _topCellVisuals.transform.localPosition = new Vector3(0, 0.0005f, 0);
         _bottomCellVisuals.transform.SetParent(bottomHolder);
         _bottomCellVisuals.transform.localRotation = bottomRotation;
-        _bottomCellVisuals.transform.localPosition = - new Vector3(0, -0.001f, 0);
+        _bottomCellVisuals.transform.localPosition = - new Vector3(0, -0.0005f, 0);
         cellHolder.transform.localRotation = holderRotation;
     }
     private bool _highlighted = false;
