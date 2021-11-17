@@ -36,6 +36,8 @@ public class GridLine : MonoBehaviour
 
     public void Pulse() {
         var finalColor = gradient.Evaluate(1);
+        if (_revealTween == null)
+            _revealTween = DOTween.Sequence();
         _revealTween.Append(DOTween.To((x) => {
                 var emissionColor = Color.Lerp(finalColor, highlightColor, x);
                 _lineRenderer.material.SetColor("_EmissionColor", emissionColor);

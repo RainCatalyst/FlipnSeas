@@ -50,7 +50,10 @@ public class LevelManager : MonoBehaviour
     }
 
     private void FlipHighlighted(Vector2Int pos) {
-        //var flipSequence = DOTween.Sequence();
+        // _flipSequence = DOTween.Sequence().OnComplete(() => {
+        //     _gridManager.RevealPaths();
+        //     print("Revealing");
+        // }).SetAutoKill(false);
         var offset = highlightSize / 2;
         for (int x = 0; x < highlightSize.x; x++) {
             for (int y = 0; y < highlightSize.y; y++) {
@@ -186,6 +189,7 @@ public class LevelManager : MonoBehaviour
 
     //private Dictionary<GridCell, Vector2Int> _highlightedCells = new Dictionary<GridCell, Vector2Int>();
 
+    //private Sequence _flipSequence;
     private Vector3 _exitPosition;
     private int _flipsLeft = 0;
 

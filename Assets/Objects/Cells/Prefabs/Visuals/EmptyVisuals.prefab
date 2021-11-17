@@ -226,13 +226,17 @@ PrefabInstance:
       propertyPath: m_RenderingLayerMask
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 332710961591838610, guid: 6256706503bcd4b40a18b73c736b9317, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 52352f5a653bb2840a220589dcf9dabf, type: 2}
     - target: {fileID: 1510181369524531353, guid: 6256706503bcd4b40a18b73c736b9317, type: 3}
       propertyPath: m_Name
       value: EmptyVisuals
       objectReference: {fileID: 0}
     - target: {fileID: 3045417635314181518, guid: 6256706503bcd4b40a18b73c736b9317, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4661458909526220305, guid: 6256706503bcd4b40a18b73c736b9317, type: 3}
       propertyPath: m_Sprite

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level3
   m_EditorClassIdentifier: 
   id: level3
-  flips: 2
+  flips: 3
   size: {x: 5, y: 3}
   entrance: {x: 0, y: 1}
   exit: {x: 4, y: 1}

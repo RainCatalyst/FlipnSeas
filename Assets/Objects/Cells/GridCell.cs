@@ -70,10 +70,9 @@ public class GridCell : MonoBehaviour {
         if (_bottomCellVisuals != null)
             GameObject.Destroy(_bottomCellVisuals.gameObject);
         _bottomCellVisuals = Instantiate(cellSO.prefab, bottomHolder.position, bottomRotation, bottomHolder);
-        
     }
 
-    public void Flip(float visualsDelay = 0f) {
+    public Sequence Flip(float visualsDelay = 0f) {
         flipSequence?.Complete();
         // Swap references
         var temp = _topCell;
@@ -94,17 +93,20 @@ public class GridCell : MonoBehaviour {
 
         // flipSequence.Append(cellHolder.DOLocalMoveY(0.3f, 1f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo));
         // flipSequence.Insert(0.05f, cellHolder.DOLocalRotate(new Vector3(180f, 0, 0), 1f).SetEase(Ease.InOutCubic));
+        // //flipSequence.InsertCallback(0.55f, () => _bottomCellVisuals.gameObject.SetActive(false));
 
         flipSequence.PrependInterval(visualsDelay);
+        return flipSequence;
     }
 
     public void SwapSides() {
         _topCellVisuals.transform.SetParent(topHolder);
-        _topCellVisuals.transform.localRotation = topRotation;
-        _topCellVisuals.transform.localPosition = new Vector3(0, 0.0005f, 0);
+        _topCellVisuals.transform.localRotation = Quaternion.identity;
+        _topCellVisuals.transform.localPosition = Vector3.zero; // new Vector3(0, 0.0005f, 0);
         _bottomCellVisuals.transform.SetParent(bottomHolder);
-        _bottomCellVisuals.transform.localRotation = bottomRotation;
-        _bottomCellVisuals.transform.localPosition = - new Vector3(0, -0.0005f, 0);
+        _bottomCellVisuals.transform.localRotation = Quaternion.identity;
+        _bottomCellVisuals.transform.localPosition = Vector3.zero; // - new Vector3(0, -0.0005f, 0);
+        //_bottomCellVisuals.gameObject.SetActive(true);
         cellHolder.transform.localRotation = holderRotation;
     }
     private bool _highlighted = false;
