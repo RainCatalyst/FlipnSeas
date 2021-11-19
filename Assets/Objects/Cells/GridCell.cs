@@ -7,8 +7,6 @@ using DG.Tweening;
 
 public class GridCell : MonoBehaviour {
     [SerializeField] private GameObject cellHighlight;
-
-    [SerializeField] private GameObject overlay;
     [SerializeField] private Transform cellHolder;
     [SerializeField] private Transform topHolder;
     [SerializeField] private Transform bottomHolder;
@@ -31,7 +29,7 @@ public class GridCell : MonoBehaviour {
 
     private void Start() {
         _animation = GetComponent<Animation>();
-        holderRotation = cellHolder.localRotation;
+        holderRotation = Quaternion.identity;
         topRotation = topHolder.localRotation;
         bottomRotation = bottomHolder.localRotation;
         cellHolder.localPosition = new Vector3(0, 5f, 0);
@@ -44,7 +42,6 @@ public class GridCell : MonoBehaviour {
 
     public void MarkPath(bool mark) {
         _markedAsPath = mark;
-        overlay.SetActive(mark);
     }
 
     public void SetHighlight(bool enable) {
@@ -99,13 +96,13 @@ public class GridCell : MonoBehaviour {
         return flipSequence;
     }
 
-    public void SwapSides() {
+    private void SwapSides() {
         _topCellVisuals.transform.SetParent(topHolder);
         _topCellVisuals.transform.localRotation = Quaternion.identity;
-        _topCellVisuals.transform.localPosition = Vector3.zero; // new Vector3(0, 0.0005f, 0);
+        _topCellVisuals.transform.localPosition = Vector3.zero;
         _bottomCellVisuals.transform.SetParent(bottomHolder);
         _bottomCellVisuals.transform.localRotation = Quaternion.identity;
-        _bottomCellVisuals.transform.localPosition = Vector3.zero; // - new Vector3(0, -0.0005f, 0);
+        _bottomCellVisuals.transform.localPosition = Vector3.zero;
         //_bottomCellVisuals.gameObject.SetActive(true);
         cellHolder.transform.localRotation = holderRotation;
     }

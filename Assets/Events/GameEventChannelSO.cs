@@ -13,7 +13,7 @@ public class GameEventChannelSO : ScriptableObject
     public UnityAction OnLevelWon;
     public UnityAction OnLevelLost;
 
-    public UnityAction<Vector3> OnCameraFocused;
+    public UnityAction<Vector3, float> OnCameraFocused;
 
     public void LoadLevel(LevelSO level)
     {
@@ -45,7 +45,7 @@ public class GameEventChannelSO : ScriptableObject
         OnLevelLost?.Invoke();
     }
 
-    public void FocusCamera(Vector3 position) {
-        OnCameraFocused?.Invoke(position);
+    public void FocusCamera(Vector3 position, float distance) {
+        OnCameraFocused?.Invoke(position, distance);
     }
 }

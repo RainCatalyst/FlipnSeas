@@ -12,6 +12,9 @@ public class LevelManager : MonoBehaviour
     [Header("Events")]
     [SerializeField] private LevelEventChannelSO levelEventChannel;
     [SerializeField] private GameEventChannelSO gameEventChannel;
+
+    public Vector2 LevelSize => new Vector2(_gridManager.GridSize.x, _gridManager.GridSize.y) * _gridManager.CellSize;
+
     private void Start() {
         _gridManager = GetComponent<GridManager>();
         _levelLogic = GetComponent<LevelLogic>();
@@ -43,7 +46,7 @@ public class LevelManager : MonoBehaviour
             if (_canClick && _hoveredCell != null) {
                 FlipHighlighted(_hoveredCell.GridPosition);
                 _flipsLeft--;
-                levelEventChannel.UpdateFlips(_flipsLeft);
+                levelEventChannel.UseFlip();
                 UpdateLevel();
             }
         }
@@ -62,8 +65,10 @@ public class LevelManager : MonoBehaviour
                 {
                     var cell = _gridManager.GetCell(cellPos);
                     var inverseCell = CellManager.Instance.GetInverse(cell.TopCell.type);
-                    cell.SetBottomCell(inverseCell);
-                    cell.Flip(0.035f * (x + y));
+                    if (inverseCell.type != cell.TopCell.type) {
+                        cell.SetBottomCell(inverseCell);
+                        cell.Flip(0.035f * (x + y));
+                    }
                     //flipSequence.InsertCallback(0.035f * (x + y), () => cell.Flip());
                 }
             }
@@ -97,7 +102,6 @@ public class LevelManager : MonoBehaviour
     private Sequence LoadCells(LevelSO level) {
         _canClick = false;
         _flipsLeft = level.flips;
-        levelEventChannel.UpdateFlips(_flipsLeft);
 
         var cells = level.layout.GetCells();
         //var levelCenter = _gridManager.GridSize / 2 - level.size / 2;
@@ -112,7 +116,7 @@ public class LevelManager : MonoBehaviour
                 _gridManager.SetBottomCell(cellPos, cellSO);
             }
         }
-        levelSequence.PrependInterval(1);
+        levelSequence.PrependInterval(1f);
         return levelSequence;
     }
 
@@ -141,8 +145,10 @@ public class LevelManager : MonoBehaviour
         // Move level
         GridCell exitCell = null;
         if (_currentLevel != null) {
-            var levelWidth = (level.size.x + 1) * _gridManager.CellSize;
-            transform.position = _exitPosition + transform.forward * levelWidth / 2;
+            float levelWidthX = (level.size.x + 1);
+            //if (level.size.x % 2 == 0)
+            //\    levelWidthX += 0.5f;
+            transform.position = _exitPosition + transform.forward * levelWidthX * _gridManager.CellSize / 2;
             exitCell = _gridManager.GetCell(_currentLevel.exit);
         }
         
@@ -176,15 +182,17 @@ public class LevelManager : MonoBehaviour
             }
         }
         UpdateLevel();
+        gameEventChannel.StartLevel();
     }
 
     private void OnLevelWon() {
         _canClick = false;
-        _gridManager.PulsePaths();
+        _gridManager.PulsePaths(true);
     }
 
     private void OnLevelLost() {
         _canClick = false;
+        _gridManager.PulsePaths(false);
     }
 
     //private Dictionary<GridCell, Vector2Int> _highlightedCells = new Dictionary<GridCell, Vector2Int>();

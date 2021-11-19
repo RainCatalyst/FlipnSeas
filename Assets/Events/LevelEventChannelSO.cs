@@ -4,10 +4,10 @@ using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "LevelEventChannel", menuName = "Events/Level Event Channel")]
 public class LevelEventChannelSO : ScriptableObject
-{
-    public UnityAction<int> OnFlipsUpdated;
+{ 
+    public UnityAction OnFlipUsed;
 
-    public void UpdateFlips(int flips) {
-        OnFlipsUpdated?.Invoke(flips);
+    public void UseFlip() {
+        OnFlipUsed?.Invoke();
     }
 }

@@ -12,6 +12,10 @@ namespace Cells
         SignpostLeft,
         SignpostUp,
         SignpostDown,
-        Destination
+        Destination,
+
+        CoinUp,
+        CoinDown,
+        EmptyNailed
     };
 }

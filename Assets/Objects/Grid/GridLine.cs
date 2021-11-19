@@ -6,7 +6,8 @@ using DG.Tweening;
 public class GridLine : MonoBehaviour
 {
     [SerializeField] private Gradient gradient;
-    [SerializeField] [ColorUsage(true, true)] private Color highlightColor;
+    [SerializeField] [ColorUsage(true, true)] private Color winColor;
+    [SerializeField] [ColorUsage(true, true)] private Color loseColor;
     [SerializeField] private float yOffset;
     private void Awake() {
         _lineRenderer = GetComponent<LineRenderer>();
@@ -34,12 +35,13 @@ public class GridLine : MonoBehaviour
             .PrependInterval(0.15f); //_lineRenderer.DOColor(new Color2(transparent, transparent), new Color2(opaque, opaque), 0.25f);
     }
 
-    public void Pulse() {
+    public void Pulse(bool win) {
         var finalColor = gradient.Evaluate(1);
         if (_revealTween == null)
             _revealTween = DOTween.Sequence();
+        var pulseColor = win ? winColor : loseColor;
         _revealTween.Append(DOTween.To((x) => {
-                var emissionColor = Color.Lerp(finalColor, highlightColor, x);
+                var emissionColor = Color.Lerp(finalColor, pulseColor, x);
                 _lineRenderer.material.SetColor("_EmissionColor", emissionColor);
                 // _lineRenderer.startColor = Color.Lerp(finalColor, highlightColor, x);
                 // _lineRenderer.endColor = Color.Lerp(finalColor, highlightColor, x);

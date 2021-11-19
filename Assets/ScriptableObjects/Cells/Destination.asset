@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 11
   inverseType: 11
-  walkable: 0
+  walkable: 1
   prefab: {fileID: 576542085184439025, guid: 545500dbd4c60484385e8647769e3566, type: 3}

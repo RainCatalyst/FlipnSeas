@@ -19,6 +19,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform cellHolder;
     [SerializeField] private LayerMask cellMask;
 
+    [SerializeField] private Transform flipTracker;
+
     [Header("Path Settings")]
     [SerializeField] private GridLine gridLinePrefab;
 
@@ -56,10 +58,10 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void PulsePaths() {
+    public void PulsePaths(bool win) {
         foreach (GridLine line in _gridLines)
         {
-            line.Pulse();
+            line.Pulse(win);
         }
     }
 
@@ -130,6 +132,10 @@ public class GridManager : MonoBehaviour
 
         // Spawn cell prefabs (empty)
         Vector2 offset = -new Vector2(cellSize * (gridSize.x / 2), cellSize * (gridSize.y / 2));
+        if (gridSize.x % 2 == 0)
+            offset.x += cellSize * 0.5f;
+        if (gridSize.y % 2 == 0)
+            offset.y += cellSize * 0.5f;
         var spawnSequence = DOTween.Sequence();
         for (int x = 0; x < gridSize.x; x++) {
             for (int y = 0; y < gridSize.y; y++) {
@@ -145,6 +151,8 @@ public class GridManager : MonoBehaviour
                 spawnSequence.InsertCallback(0.1f + 0.05f * (x + y), () => cell.FallAnimation());
             }
         }
+
+        flipTracker.position = transform.position + transform.right * (offset.y + (gridSize.y - 0.125f) * cellSize);
         // spawnSequence.PrependInterval(3);
     }
 
