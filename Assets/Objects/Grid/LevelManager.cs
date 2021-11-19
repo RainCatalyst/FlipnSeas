@@ -82,8 +82,13 @@ public class LevelManager : MonoBehaviour
             for (int y = 0; y < highlightSize.y; y++) {
                 var cellPos = new Vector2Int(x, y) + pos - offset;
                 if (_gridManager.IsInsideGrid(cellPos)) {
+                    var cell = _gridManager.GetCell(cellPos);
+                    if (cell.TopCell.type != CellManager.Instance.GetInverse(cell.TopCell.type).type)
+                    {
+                        _gridManager.SetCellHighlight(cellPos, true);
+                    }
                     //_highlightedCells.Add(_gridManager.GetCell(gri));
-                    _gridManager.SetCellHighlight(cellPos, true);
+                    
                 }
             }
         }
