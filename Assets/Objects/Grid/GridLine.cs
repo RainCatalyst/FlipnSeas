@@ -39,13 +39,26 @@ public class GridLine : MonoBehaviour
         var finalColor = gradient.Evaluate(1);
         if (_revealTween == null)
             _revealTween = DOTween.Sequence();
-        var pulseColor = win ? winColor : loseColor;
-        _revealTween.Append(DOTween.To((x) => {
-                var emissionColor = Color.Lerp(finalColor, pulseColor, x);
+
+        if (win) {
+            _revealTween.Append(DOTween.To((x) =>
+            {
+                var emissionColor = Color.Lerp(finalColor, winColor, x);
+                _lineRenderer.material.SetColor("_EmissionColor", emissionColor);
+                // _lineRenderer.startColor = Color.Lerp(finalColor, highlightColor, x);
+                // _lineRenderer.endColor = Color.Lerp(finalColor, highlightColor, x);
+            }, 0, 1, .25f));
+        } else {
+            _revealTween.Append(DOTween.To((x) =>
+            {
+                var emissionColor = Color.Lerp(finalColor, loseColor, x);
                 _lineRenderer.material.SetColor("_EmissionColor", emissionColor);
                 // _lineRenderer.startColor = Color.Lerp(finalColor, highlightColor, x);
                 // _lineRenderer.endColor = Color.Lerp(finalColor, highlightColor, x);
             }, 0, 1, .25f).SetLoops(2, LoopType.Yoyo));
+        }
+        
+            
         //_revealTween.Append(_lineRenderer.DOColor(new Color2(finalColor, finalColor), new Color2(Color.green, Color.green), 0.5f).SetLoops(2, LoopType.Yoyo));//.SetEase(Ease.InOutSine));
         //_lineRenderer.startColor = Color.green;
         //_lineRenderer.endColor = Color.green;

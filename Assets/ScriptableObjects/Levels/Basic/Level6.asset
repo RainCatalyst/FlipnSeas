@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2928768e36ba8b84f87b078456a88b45, type: 3}
-  m_Name: SignpostsLevel1
+  m_Name: Level6
   m_EditorClassIdentifier: 
-  id: fuck no
-  flips: 1
-  size: {x: 5, y: 3}
+  id: level7
+  flips: 2
+  size: {x: 6, y: 3}
   entrance: {x: 0, y: 0}
-  exit: {x: 4, y: 1}
+  exit: {x: 5, y: 0}
   layout:
-    gridSize: {x: 5, y: 3}
+    gridSize: {x: 6, y: 3}
     cellSize: {x: 64, y: 16}
     cells:
-    - row: 0000000000000000000000000000000000000000
-    - row: 020000000e000000080000000e0000000b000000
-    - row: 0000000000000000000000000000000000000000
+    - row: 020000000100000000000000000000000e0000000b000000
+    - row: 020000000e0000000000000001000000010000000b000000
+    - row: 000000000000000000000000000000000000000000000000

@@ -43,6 +43,16 @@ public class GameManager : MonoBehaviour
         restartSequnce.PrependInterval(delay);
     }
 
+    private void OnClick() {
+        if (_waitForClick) {
+            _waitForClick = false;
+            if (_levelWon)
+                LoadNextLevel();
+            else
+                RestartLevel(0.45f);
+        }
+    }
+
     private void OnInteract()
     {
         LoadNextLevel();
@@ -55,13 +65,15 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelWon()
     {
-        print("won");
-        LoadNextLevel();
+        _waitForClick = true;
+        _levelWon = true;
     }
 
     private void OnLevelLost()
     {
-        print("lost");
         RestartLevel(0.45f);
     }
+
+    private bool _waitForClick = false;
+    private bool _levelWon = false;
 }
