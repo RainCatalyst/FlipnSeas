@@ -10,6 +10,7 @@ public class GridCell : MonoBehaviour {
     [SerializeField] private Transform cellHolder;
     [SerializeField] private Transform topHolder;
     [SerializeField] private Transform bottomHolder;
+    [SerializeField] private GameObject dustEffect;
     
     [Header("Events")]
     [SerializeField] private LevelEventChannelSO levelEventChannel;
@@ -36,8 +37,9 @@ public class GridCell : MonoBehaviour {
     }
 
     public void FallAnimation() {
-        cellHolder.DOLocalMoveY(0f, 0.6f).SetEase(Ease.InQuad);
-        cellHolder.DORotate(new Vector3(Random.Range(-90f, 90f), Random.Range(-20f, 20f), 0f), 0.6f).From().SetEase(Ease.InQuad);
+        var fallSequence = DOTween.Sequence().OnComplete(() => Instantiate(dustEffect, transform.position, Quaternion.identity, transform));
+        fallSequence.Append(cellHolder.DOLocalMoveY(0f, 0.6f).SetEase(Ease.InQuad));
+        fallSequence.Join(cellHolder.DORotate(new Vector3(Random.Range(-90f, 90f), Random.Range(-20f, 20f), 0f), 0.6f).From().SetEase(Ease.InQuad));
     }
 
     public void MarkPath(bool mark) {
@@ -105,6 +107,7 @@ public class GridCell : MonoBehaviour {
         _bottomCellVisuals.transform.localPosition = Vector3.zero;
         //_bottomCellVisuals.gameObject.SetActive(true);
         cellHolder.transform.localRotation = holderRotation;
+        //Instantiate(dustEffect, transform.position, Quaternion.identity, transform);
     }
     private bool _highlighted = false;
     private bool _updated = false;

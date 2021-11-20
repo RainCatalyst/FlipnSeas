@@ -79,10 +79,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellHighlight: {fileID: 6154078171658685917}
-  overlay: {fileID: 0}
   cellHolder: {fileID: 8158008000673338826}
   topHolder: {fileID: 2150668440762157667}
   bottomHolder: {fileID: 5297351185520554269}
+  dustEffect: {fileID: 6887651959251951923, guid: 94df339113a48f340b0cf6c08ec5967d, type: 3}
   levelEventChannel: {fileID: 11400000, guid: 81fcd6621d44a674ab4f39c063d45387, type: 2}
 --- !u!65 &9161873808425547668
 BoxCollider:
