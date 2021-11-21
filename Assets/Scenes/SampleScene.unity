@@ -731,9 +731,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1eebd70356723d34e85a5e7cecd7a316, type: 2}
   - {fileID: 11400000, guid: 5222fda018f021a4286dd120f4deedce, type: 2}
   - {fileID: 11400000, guid: 9afc3686691c21a4fafd1d04803c2f95, type: 2}
+  - {fileID: 11400000, guid: e23624c7d123ad74da32a1038dbacf9d, type: 2}
+  - {fileID: 11400000, guid: 464c9228dddf22f4a96a7f424a5a124a, type: 2}
+  - {fileID: 11400000, guid: f57658385b2703a4c9e0fda2dfbf583a, type: 2}
+  - {fileID: 11400000, guid: 4c51f2fa81cd2c4438cc3312c7d538ae, type: 2}
   levelManager: {fileID: 1166448167}
   completeEffect: {fileID: 1407675360}
-  levelIdx: 20
+  levelIdx: -1
   gameEventChannel: {fileID: 11400000, guid: 514a32e0485ec354cbdca884e72d0124, type: 2}
 --- !u!114 &963371035
 MonoBehaviour:
