@@ -172,6 +172,7 @@ public class LevelManager : MonoBehaviour
         if (exitCell != null) {
             var exitLine = _gridManager.AddLine(exitCell, _gridManager.GetCell(level.entrance));
             levelSequence.AppendCallback(() => exitLine.RevealPath());
+            levelSequence.AppendCallback(() => exitLine.Pulse(true));
         }
     }
 

@@ -15,8 +15,8 @@ MonoBehaviour:
   id: level7
   flips: 2
   size: {x: 6, y: 3}
-  entrance: {x: 0, y: 0}
-  exit: {x: 5, y: 0}
+  entrance: {x: 0, y: 1}
+  exit: {x: 5, y: 1}
   layout:
     gridSize: {x: 6, y: 3}
     cellSize: {x: 64, y: 16}

@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private LevelSO[] levels;
     [SerializeField] private LevelManager levelManager;
+    [SerializeField] private VisualEffect completeEffect;
     [SerializeField] private int levelIdx = -1;
 
     [Header("Events")]
@@ -67,6 +69,7 @@ public class GameManager : MonoBehaviour
     {
         _waitForClick = true;
         _levelWon = true;
+        completeEffect.Play();
     }
 
     private void OnLevelLost()
