@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LevelSO[] levels;
     [SerializeField] private LevelManager levelManager;
     [SerializeField] private VisualEffect completeEffect;
+    [SerializeField] private AudioSource completeSound;
+    [SerializeField] private AudioSource failSound;
     [SerializeField] private int levelIdx = -1;
 
     [Header("Events")]
@@ -36,23 +38,13 @@ public class GameManager : MonoBehaviour
         loadSequence.AppendCallback(() => gameEventChannel.LoadLevel(levels[levelIdx]));
         loadSequence.InsertCallback(0.5f, () => 
             gameEventChannel.FocusCamera(levelManager.transform.position, levelManager.LevelSize.y));
-        loadSequence.PrependInterval(0.5f);
+        loadSequence.PrependInterval(0.95f);
     }
 
     public void RestartLevel(float delay = 0f) {
         var restartSequnce = DOTween.Sequence();
         restartSequnce.AppendCallback(() => gameEventChannel.RestartLevel());
         restartSequnce.PrependInterval(delay);
-    }
-
-    private void OnClick() {
-        if (_waitForClick) {
-            _waitForClick = false;
-            if (_levelWon)
-                LoadNextLevel();
-            else
-                RestartLevel(0.45f);
-        }
     }
 
     private void OnInteract()
@@ -67,16 +59,14 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelWon()
     {
-        _waitForClick = true;
-        _levelWon = true;
+        LoadNextLevel();
         completeEffect.Play();
+        completeSound.PlayDelayed(0.2f);
     }
 
     private void OnLevelLost()
     {
         RestartLevel(0.45f);
+        failSound.PlayDelayed(0.2f);
     }
-
-    private bool _waitForClick = false;
-    private bool _levelWon = false;
 }

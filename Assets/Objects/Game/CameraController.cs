@@ -25,8 +25,6 @@ public class CameraController : MonoBehaviour
         _focusTween?.Kill();
         _focusTween = DOTween.Sequence();
         _focusTween.Append(transform.DOMove(target, focusDuration).SetEase(Ease.InOutQuad));
-        print("Initial " + cameraHolder.localPosition);
-        print("Final " + -cameraHolder.forward * distance);
         _focusTween.Join(cameraHolder.DOLocalMove(-cameraHolder.forward * distance, focusDuration).SetEase(Ease.InOutQuad));
     }
 
