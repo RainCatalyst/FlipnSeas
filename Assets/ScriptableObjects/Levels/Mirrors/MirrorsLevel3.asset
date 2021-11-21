@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MirrorsLevel3
   m_EditorClassIdentifier: 
   id: mirrors_level1
-  flips: 3
+  flips: 2
   size: {x: 5, y: 3}
   entrance: {x: 0, y: 1}
   exit: {x: 4, y: 1}
