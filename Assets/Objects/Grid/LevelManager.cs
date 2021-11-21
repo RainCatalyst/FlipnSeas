@@ -9,6 +9,9 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private Vector2Int highlightSize;
 
+    [SerializeField] private AudioSource fallSound;
+    [SerializeField] private AudioSource flipSound;
+
     [Header("Events")]
     [SerializeField] private LevelEventChannelSO levelEventChannel;
     [SerializeField] private GameEventChannelSO gameEventChannel;
@@ -73,6 +76,8 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
+
+        PlayFlip(0.145f);
     }
 
     private void HighlightCells(Vector2Int pos) {
@@ -143,6 +148,16 @@ public class LevelManager : MonoBehaviour
         // _highlightedCells.Clear();
     }
 
+    private void PlayFlip(float delay) {
+        flipSound.pitch = Random.Range(0.91f, 1.175f);
+        flipSound.PlayDelayed(delay);
+    }
+
+    private void PlayFall(float delay) {
+        fallSound.pitch = Random.Range(0.95f, 1.05f);
+        fallSound.PlayDelayed(delay);
+    }
+
     private void OnLevelLoad(LevelSO level)
     {
         print("Loading level");
@@ -174,6 +189,8 @@ public class LevelManager : MonoBehaviour
             levelSequence.AppendCallback(() => exitLine.RevealPath());
             levelSequence.AppendCallback(() => exitLine.Pulse(true));
         }
+
+        PlayFall(0.55f);
     }
 
     private void OnLevelRestart(){
@@ -187,6 +204,7 @@ public class LevelManager : MonoBehaviour
                 _gridManager.GetCell(new Vector2Int(x, y)).Flip(0.035f * (x + y));
             }
         }
+        PlayFlip(0.145f);
         UpdateLevel();
         gameEventChannel.StartLevel();
     }

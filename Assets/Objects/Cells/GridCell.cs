@@ -37,7 +37,9 @@ public class GridCell : MonoBehaviour {
     }
 
     public void FallAnimation() {
-        var fallSequence = DOTween.Sequence().OnComplete(() => Instantiate(dustEffect, transform.position, Quaternion.identity, transform));
+        var fallSequence = DOTween.Sequence().OnComplete(() => {
+            Instantiate(dustEffect, transform.position, Quaternion.identity, transform);
+        });
         fallSequence.Append(cellHolder.DOLocalMoveY(0f, 0.6f).SetEase(Ease.InQuad));
         fallSequence.Join(cellHolder.DORotate(new Vector3(Random.Range(-90f, 90f), Random.Range(-20f, 20f), 0f), 0.6f).From().SetEase(Ease.InQuad));
     }
