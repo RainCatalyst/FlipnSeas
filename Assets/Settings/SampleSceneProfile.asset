@@ -107,12 +107,12 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.243
+    m_Value: 0.288
     min: 0
     max: 1
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.52
+    m_Value: 0.612
     min: 0.01
     max: 1
   rounded:
@@ -153,16 +153,16 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 1.4
+    m_Value: 0.99
     min: 0.1
   aperture:
     m_OverrideState: 1
-    m_Value: 5.2
+    m_Value: 6
     min: 1
     max: 32
   focalLength:
     m_OverrideState: 1
-    m_Value: 50
+    m_Value: 60
     min: 1
     max: 300
   bladeCount:
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
   m_Name: ColorAdjustments
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   postExposure:
     m_OverrideState: 1
@@ -253,6 +253,6 @@ MonoBehaviour:
   m_AdvancedMode: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.104
+    m_Value: 0.105
     min: 0
     max: 1

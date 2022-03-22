@@ -41,6 +41,10 @@ public class LevelManager : MonoBehaviour
     }
 
     private void Update() {
+        #if UNITY_WEBGL
+            if (Input.GetMouseButtonDown(0))
+                _clicked = true;
+        #endif
         // Update currenty hovered cell
         _gridManager.FindHoveredCell();
 
@@ -132,6 +136,7 @@ public class LevelManager : MonoBehaviour
 
     // Callbacks
     private void OnClick() {
+        print("Clickedf");
         _clicked = true;
     }
 

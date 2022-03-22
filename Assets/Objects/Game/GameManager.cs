@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private VisualEffect completeEffect;
     [SerializeField] private AudioSource completeSound;
     [SerializeField] private AudioSource failSound;
+
+    [SerializeField] private Transform credits;
     [SerializeField] private int levelIdx = -1;
 
     [Header("Events")]
@@ -30,10 +32,23 @@ public class GameManager : MonoBehaviour
         gameEventChannel.OnLevelLost -= OnLevelLost;
     }
 
+    private void Update() {
+        #if UNITY_WEBGL
+            if (Input.GetKeyDown(KeyCode.E))
+                LoadNextLevel();
+            if (Input.GetKeyDown(KeyCode.R))
+                RestartLevel();
+        #endif
+    }
+
     public void LoadNextLevel() {
+        levelIdx += 1;
+        if (levelIdx >= levels.Length) {
+            var test = DOTween.Sequence().PrependInterval(1f).OnComplete(() => OpenCredits());
+            return;
+        }
+
         gameEventChannel.CloseLevel();
-        levelIdx = Mathf.Clamp(levelIdx + 1, 0, levels.Length - 1);
-        
         var loadSequence = DOTween.Sequence();
         loadSequence.AppendCallback(() => gameEventChannel.LoadLevel(levels[levelIdx]));
         loadSequence.InsertCallback(0.5f, () => 
@@ -45,6 +60,10 @@ public class GameManager : MonoBehaviour
         var restartSequnce = DOTween.Sequence();
         restartSequnce.AppendCallback(() => gameEventChannel.RestartLevel());
         restartSequnce.PrependInterval(delay);
+    }
+
+    private void OpenCredits() {
+        gameEventChannel.FocusCamera(credits.position, 3f);
     }
 
     private void OnInteract()

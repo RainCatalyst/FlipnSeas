@@ -15,7 +15,7 @@ MonoBehaviour:
   id: fuck no
   flips: 3
   size: {x: 5, y: 4}
-  entrance: {x: 0, y: 0}
+  entrance: {x: 0, y: 3}
   exit: {x: 3, y: 0}
   layout:
     gridSize: {x: 5, y: 4}

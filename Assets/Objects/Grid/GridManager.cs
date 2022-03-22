@@ -33,6 +33,12 @@ public class GridManager : MonoBehaviour
         _gridLines = new GridLine[0];
     }
 
+    private void Update() {
+        #if UNITY_WEBGL
+            _mouseAxis = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        #endif
+    }
+
     public void UpdatePaths(List<List<GridCell>> paths) {
         foreach (GridLine line in _gridLines) {
             GameObject.Destroy(line.gameObject);
@@ -200,6 +206,7 @@ public class GridManager : MonoBehaviour
     // Input
     void OnMouseX(InputValue value)
     {
+        print(value.Get<float>());
         _mouseAxis.x = value.Get<float>();
     }
 

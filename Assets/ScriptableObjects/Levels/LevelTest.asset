@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: test
   flips: 5
-  size: {x: 6, y: 3}
+  size: {x: 3, y: 3}
   entrance: {x: 0, y: 0}
-  exit: {x: 5, y: 0}
+  exit: {x: 2, y: 0}
   layout:
-    gridSize: {x: 6, y: 3}
+    gridSize: {x: 3, y: 3}
     cellSize: {x: 64, y: 16}
     cells:
-    - row: 02000000000000000100000000000000000000000b000000
-    - row: 000000000e0000000e000000000000000000000000000000
-    - row: 02000000000000000e00000001000000000000000b000000
+    - row: 000000000000000000000000
+    - row: 000000000200000000000000
+    - row: 000000000000000000000000

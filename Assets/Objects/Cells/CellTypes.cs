@@ -16,6 +16,7 @@ namespace Cells
 
         CoinUp,
         CoinDown,
-        EmptyNailed
+        EmptyNailed,
+        Chest
     };
 }
