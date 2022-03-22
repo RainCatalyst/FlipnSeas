@@ -97,18 +97,7 @@
                     "path": "<Touchscreen>/primaryTouch/position/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Touch",
-                    "action": "MouseX",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f1eb4418-d33f-4e19-b19e-641af7cadce2",
-                    "path": "<Gamepad>/leftStick/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad;Joystick",
+                    "groups": "Touch;Gamepad",
                     "action": "MouseX",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -130,18 +119,7 @@
                     "path": "<Touchscreen>/primaryTouch/position/y",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Touch",
-                    "action": "MouseY",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "78730b01-a31d-4217-8962-01fedb677bdd",
-                    "path": "<Gamepad>/leftStick/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad;Joystick",
+                    "groups": "Touch;Gamepad",
                     "action": "MouseY",
                     "isComposite": false,
                     "isPartOfComposite": false
