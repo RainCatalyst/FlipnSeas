@@ -1,5 +1,5 @@
 {
-    "name": "BasicInput",
+    "name": "SwitchInput",
     "maps": [
         {
             "name": "Player",
@@ -49,56 +49,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "cc586dac-cab9-4eb0-8087-983e4a29efb4",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Click",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e917a3b4-8197-45e7-a919-4060879be9f1",
-                    "path": "<Touchscreen>/primaryTouch/tap",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Touch",
-                    "action": "Click",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f88bad79-d052-471e-b312-b5269578c2a6",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Click",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "67919f2f-48d7-4686-9b0e-e58d2ff5aafd",
-                    "path": "<Mouse>/position/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MouseX",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0685d36f-ce72-4932-96db-a4d41c934a05",
-                    "path": "<Touchscreen>/primaryTouch/position/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Touch;Gamepad",
-                    "action": "MouseX",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -115,28 +71,6 @@
                 },
                 {
                     "name": "",
-                    "id": "23e334f3-c59c-4e07-80ee-55f9ec1b30e5",
-                    "path": "<Mouse>/position/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MouseY",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1b0c6a87-1599-4bc4-b58a-9193000854b7",
-                    "path": "<Touchscreen>/primaryTouch/position/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Touch;Gamepad",
-                    "action": "MouseY",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "166ad1a9-be8e-49e7-94ae-d4e40eb80d93",
                     "path": "<XInputController>/leftStick/y",
                     "interactions": "",
@@ -148,34 +82,12 @@
                 },
                 {
                     "name": "",
-                    "id": "c928d253-0665-4f53-a164-c1bb3cbf608d",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "1a21bf04-7b6b-480a-8180-d39493aacacf",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e6afb4c2-0956-4239-9e9d-b79d8b973f02",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
