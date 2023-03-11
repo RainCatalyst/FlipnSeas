@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "GameEventChannel", menuName = "Events/Game Event Channel")]
@@ -45,7 +44,8 @@ public class GameEventChannelSO : ScriptableObject
         OnLevelLost?.Invoke();
     }
 
-    public void FocusCamera(Vector3 position, float distance) {
+    public void FocusCamera(Vector3 position, float distance)
+    {
         OnCameraFocused?.Invoke(position, distance);
     }
 }
